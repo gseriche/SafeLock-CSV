@@ -14,13 +14,10 @@ for file in csv_files:
         TempOnlyFilePath = list()
         for row in csv_reader:
             filePath = row[0].split('\\')
-            filePath.pop()
-            filepath = '\\'.join(filePath)
-            TempOnlyFilePath.append(filepath)
+            TempOnlyFilePath.append(filePath[0]+'\\'+filePath[1])
         onlyFilePath = list(dict.fromkeys(TempOnlyFilePath))
     
 
     data = pd.DataFrame(onlyFilePath, columns=header)
     data.to_csv(csv_done+"/"+'done-'+file, index=False)
-
 
