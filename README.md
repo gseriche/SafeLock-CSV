@@ -1,45 +1,59 @@
 # SafeLock-CSV
 
-This tool takes the csv created in SafeLock Stellar One console from Stellar Enforce scan tool to make the whitelist.
+This tool takes the CSV created in the SafeLock Stellar One console from the
+Stellar Enforce scan tool to make the whitelist.
 
-You must install the python requirements first, this tool was made to work with Python 3.9.
+This tool requires Python 3.9+ and has no runtime dependencies — it uses only
+the Python standard library (`csv`, `pathlib`, `argparse`, `logging`).
 
 ## Installation
 
-Use the package manager pip to install the requirements
+No installation is required beyond a Python 3.9+ interpreter. If you plan to
+run the test suite, install the dev dependencies:
 
 ```bash
-pip install -f requirements.txt
+pip install -r requirements-dev.txt
 ```
 
-Requirements.txt
-~~~~
-numpy==1.22.4
-pandas==1.4.2
-python-dateutil==2.8.2
-pytz==2022.1
-six==1.16.0
-~~~~~
+Two folders are used by default:
+- `approve-list-csv` — the raw CSVs exported from Stellar Enforce
+- `approve-list-done` — the cleaned CSVs written by this tool (created
+  automatically if it doesn't exist)
 
-Two folders must be created in the root of this tool:
-- approve-list-csv
-- approve-list-done
-
-The CSV created in Stellar Enforce must be in the *approve-list-csv* folder.
-
-The processed CSV files will be in the *approved-list-done*
-
-## Usage
+## Usage
 
 ```bash
 python main.py
-````
+```
+
+By default this reads CSVs from `./approve-list-csv` and writes cleaned CSVs
+to `./approve-list-done`. Both locations can be overridden:
+
+```bash
+python main.py --input-dir /path/to/raw-csv --output-dir /path/to/output
+```
+
+| Flag           | Default              | Description                                  |
+| -------------- | --------------------- | --------------------------------------------- |
+| `--input-dir`  | `./approve-list-csv`  | Directory containing raw Stellar Enforce CSVs |
+| `--output-dir` | `./approve-list-done` | Directory to write cleaned CSVs into          |
+
+If the input directory is missing or contains no CSV files, the tool logs a
+message and exits cleanly instead of crashing. If an individual CSV fails to
+process, it is skipped (with a logged error) and the rest of the batch
+continues.
+
+## Running tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
 
 ## Contributing
-Pull requests are welcome. For major changes, please open a issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update the README as appropiate.
+Please make sure to update the README as appropriate.
 
-## License
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
